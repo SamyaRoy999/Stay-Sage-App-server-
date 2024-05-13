@@ -8,14 +8,14 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express()
 
 app.use(cors(
-    {
-        origin: [
-            "http://localhost:5173",
-            "https://cardoctor-bd.web.app",
-            "https://cardoctor-bd.firebaseapp.com",
-        ],
-        credentials: true,
-    }
+  {
+    origin: [
+      "http://localhost:5173",
+      "https://cardoctor-bd.web.app",
+      "https://cardoctor-bd.firebaseapp.com",
+    ],
+    credentials: true,
+  }
 ))
 
 
@@ -32,12 +32,16 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    
-    // await client.connect();
-    
-    const collection = client.db("hotel-booking").collection("rooms")
-     
 
+    // await client.connect();
+
+    const collection = client.db("hotel-booking").collection("rooms")
+
+    app.get('/rooms', async (req, res) => {
+      const result = await collection.find().toArray()
+      res.send(result)
+      console.log(result);
+    })
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
@@ -49,7 +53,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send("WOLCOME TO OUR HOTEL");
+  res.send("WOLCOME TO OUR HOTEL");
 })
 
 app.use(express.json())
