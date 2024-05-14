@@ -40,11 +40,22 @@ async function run() {
     app.get('/rooms', async (req, res) => {
       const result = await collection.find().toArray()
       res.send(result)
-      console.log(result);
+
     })
+    // 
+    app.get('/roomsr', async (req, res) => {
+      const minPrice = parseInt(req.query.minPrice) ;
+      const maxPrice = parseInt(req.query.maxPrice) ;
+
+     
+      
+      const result = await collection.find({ price: { $gte: minPrice, $lte: maxPrice } }).toArray();
+      res.send(result)
+    });
+    // 
 
     app.get('/rooms/singel/:id', async (req, res) => {
-      const result = await collection.findOne({_id: new ObjectId(req.params.id) })
+      const result = await collection.findOne({ _id: new ObjectId(req.params.id) })
       res.send(result)
     })
 
