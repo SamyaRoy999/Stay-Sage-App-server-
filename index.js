@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express()
-
+app.use(express.json())
 app.use(cors(
   {
     origin: [
@@ -36,26 +36,30 @@ async function run() {
     // await client.connect();
 
     const collection = client.db("hotel-booking").collection("rooms")
+    const collectionBook = client.db("hotel-booking").collection("book")
 
     app.get('/rooms', async (req, res) => {
       const result = await collection.find().toArray()
       res.send(result)
 
     })
-    // 
-    app.get('/roomsr', async (req, res) => {
-      const minPrice = parseInt(req.query.minPrice) ;
-      const maxPrice = parseInt(req.query.maxPrice) ;
 
-     
-      
+    app.get('/roomsr', async (req, res) => {
+      const minPrice = parseInt(req.query.minPrice);
+      const maxPrice = parseInt(req.query.maxPrice);
       const result = await collection.find({ price: { $gte: minPrice, $lte: maxPrice } }).toArray();
       res.send(result)
     });
-    // 
 
     app.get('/rooms/singel/:id', async (req, res) => {
       const result = await collection.findOne({ _id: new ObjectId(req.params.id) })
+      res.send(result)
+    })
+
+    app.post('/mybook', async (req, res) => {
+      const singelRoom = req.body
+      console.log(singelRoom)
+      const result = await collectionBook.insertOne(singelRoom)
       res.send(result)
     })
 
