@@ -63,8 +63,15 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/mybook/:email', async (req, res) => {
+      const result = await collectionBook.find({userEmail: req.params.email}).toArray()
+      console.log(result);
+      res.send(result)
+    })
+
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
