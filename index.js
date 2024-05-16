@@ -56,6 +56,19 @@ async function run() {
       res.send(result)
     })
 
+    app.patch('/rooms/singel/:id', async (req, res) => {
+      const id = req.params.id
+      const data2 = req.body
+      const query = { _id: new ObjectId(id) }
+      const update = {
+        $set: { 
+          availability: data2.availability }
+      }
+      const result = await collection.updateOne(query, update)
+      console.log(result);
+      res.send(result)
+    })
+
     app.post('/mybook', async (req, res) => {
       const singelRoom = req.body
       console.log(singelRoom)
@@ -72,6 +85,17 @@ async function run() {
     app.delete('/mybook/:id', async (req, res) => {
       const id = req.params.id
       const result = await collectionBook.deleteOne({ _id: new ObjectId(id) })
+      res.send(result)
+    })
+
+    app.patch('/mybook/:id', async (req, res) => {
+      const id = req.params.id
+      const data = req.body
+      const query = { _id: new ObjectId(id) }
+      const update = {
+        $set: { startDate: data.startDate }
+      }
+      const result = await collectionBook.updateOne(query, update)
       res.send(result)
     })
 
